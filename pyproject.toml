@@ -1,5 +1,5 @@
 [project]
-name = "spotify-bpm"
+name = "run-tracks"
 version = "0.1.0"
 description = "Look up BPMs for your Spotify tracks via GetSongBPM and Deezer"
 readme = "README.md"
@@ -11,7 +11,7 @@ dependencies = [
 ]
 
 [project.scripts]
-run-tracks = "spotify_bpm.cli:main"
+run-tracks = "run_tracks.cli:main"
 
 [build-system]
 requires = ["hatchling"]

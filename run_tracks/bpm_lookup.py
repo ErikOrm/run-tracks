@@ -9,7 +9,7 @@ import requests
 
 from .spotify_source import Track
 
-USER_AGENT = "spotify-bpm/0.1 (personal project)"
+USER_AGENT = "run-tracks/0.1 (personal project)"
 
 
 @dataclass

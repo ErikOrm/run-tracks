@@ -26,7 +26,7 @@ Results are cached locally, so re-runs only query new tracks.
 
    This puts `run-tracks` in `~/.local/bin` (run `uv tool update-shell` if that
    isn't on your `PATH`). With `--editable`, code changes take effect without
-   reinstalling. To remove it again: `uv tool uninstall spotify-bpm`.
+   reinstalling. To remove it again: `uv tool uninstall run-tracks`.
 
 2. Create an app in the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard)
    and add `http://127.0.0.1:8888/callback` as a Redirect URI.
@@ -39,7 +39,7 @@ Results are cached locally, so re-runs only query new tracks.
    ```
 
    Run it again at any time to change a value; pressing Enter keeps the current one.
-   The settings are saved to `~/.config/spotify-bpm/.env`:
+   The settings are saved to `~/.config/run-tracks/.env`:
 
    | Variable                | Description                                              |
    |-------------------------|----------------------------------------------------------|
@@ -55,9 +55,9 @@ Results are cached locally, so re-runs only query new tracks.
 
 | File                                           | Contents                    |
 |------------------------------------------------|-----------------------------|
-| `~/.config/spotify-bpm/.env`                   | Credentials and API keys    |
-| `~/.local/share/spotify-bpm/spotify_token.json`| Spotify login token         |
-| `~/.local/share/spotify-bpm/bpm_cache.db`      | Cached tracks and BPMs      |
+| `~/.config/run-tracks/.env`                   | Credentials and API keys    |
+| `~/.local/share/run-tracks/spotify_token.json`| Spotify login token         |
+| `~/.local/share/run-tracks/bpm_cache.db`      | Cached tracks and BPMs      |
 
 `$XDG_CONFIG_HOME` and `$XDG_DATA_HOME` are respected if set.
 

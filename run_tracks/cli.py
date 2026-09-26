@@ -12,8 +12,8 @@ from .bpm_lookup import Deezer, GetSongBPM, LookupResult
 from .cache import Cache
 
 # Fixed locations, so the command works the same from any directory.
-CONFIG_DIR = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "spotify-bpm"
-DATA_DIR = Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local" / "share")) / "spotify-bpm"
+CONFIG_DIR = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "run-tracks"
+DATA_DIR = Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local" / "share")) / "run-tracks"
 ENV_PATH = CONFIG_DIR / ".env"
 CACHE_PATH = DATA_DIR / "bpm_cache.db"
 TOKEN_PATH = DATA_DIR / "spotify_token.json"

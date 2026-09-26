@@ -169,7 +169,7 @@ wheels = [
 ]
 
 [[package]]
-name = "spotify-bpm"
+name = "run-tracks"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
