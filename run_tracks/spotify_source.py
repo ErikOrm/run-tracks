@@ -1,3 +1,4 @@
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterator
@@ -56,9 +57,25 @@ def liked_tracks(sp: spotipy.Spotify) -> Iterator[Track]:
             yield track
 
 
+def resolve_playlist(sp: spotipy.Spotify, playlist: str) -> str:
+    """Return `playlist` unchanged if it looks like an ID, URI or URL, otherwise
+    look it up by name (case-insensitive) among the user's playlists."""
+    if re.fullmatch(r"[0-9A-Za-z]{22}", playlist) or playlist.startswith("spotify:") or "/" in playlist:
+        return playlist
+    matches = [pl for pl in my_playlists(sp) if pl["name"].casefold() == playlist.casefold()]
+    if not matches:
+        raise ValueError(f"No playlist named {playlist!r}. Run `run-tracks playlists` to list them.")
+    if len(matches) > 1:
+        ids = ", ".join(pl["id"] for pl in matches)
+        raise ValueError(f"Several playlists are named {playlist!r} ({ids}). Pass an ID instead.")
+    return matches[0]["id"]
+
+
 def playlist_tracks(sp: spotipy.Spotify, playlist: str) -> Iterator[Track]:
-    """`playlist` can be an ID, URI or URL. Since Feb 2026, dev-mode apps can only
-    read playlists the user owns or collaborates on."""
+    """`playlist` can be an ID, URI, URL or the name of one of the user's playlists.
+    Since Feb 2026, dev-mode apps can only read playlists the user owns or
+    collaborates on."""
+    playlist = resolve_playlist(sp, playlist)
     for entry in _paginate(sp, sp.playlist_items(playlist, limit=50)):
         # The Feb 2026 API renamed "track" to "item" in playlist entries.
         if track := _to_track(entry.get("item") or entry.get("track")):

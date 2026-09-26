@@ -70,8 +70,9 @@ run-tracks liked
 # List your playlists (ID and name)
 run-tracks playlists
 
-# Look up BPMs for a playlist (ID, URI or URL)
+# Look up BPMs for a playlist (ID, URI, URL or the name of one of your playlists)
 run-tracks playlist 37i9dQZF1DXcBWIGoYBM5M
+run-tracks playlist "Movits"
 
 # Search the whole Spotify catalog (first 5 results by default)
 run-tracks search "daft punk one more time"

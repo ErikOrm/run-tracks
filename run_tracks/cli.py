@@ -119,21 +119,25 @@ def main():
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("setup", help="enter your Spotify and GetSongBPM credentials")
 
-    lookup_opts = argparse.ArgumentParser(add_help=False)
-    lookup_opts.add_argument("--limit", type=int, help="only process the first N tracks")
-    lookup_opts.add_argument("--retry-misses", action="store_true",
-                             help="re-query sources that previously had no BPM")
-    lookup_opts.add_argument("--all-sources", action="store_true",
-                             help="query every source instead of stopping at the first hit")
+    def lookup_opts(default_limit: int) -> argparse.ArgumentParser:
+        # A fresh parent per subcommand: parents share their Action objects, so
+        # set_defaults on one subcommand would change the default for all of them.
+        opts = argparse.ArgumentParser(add_help=False)
+        opts.add_argument("--limit", type=int, default=default_limit,
+                          help=f"only process the first N tracks (0 = no limit, default {default_limit})")
+        opts.add_argument("--retry-misses", action="store_true",
+                          help="re-query sources that previously had no BPM")
+        opts.add_argument("--all-sources", action="store_true",
+                          help="query every source instead of stopping at the first hit")
+        return opts
 
-    sub.add_parser("liked", parents=[lookup_opts], help="look up BPMs for your Liked Songs")
-    p = sub.add_parser("playlist", parents=[lookup_opts], help="look up BPMs for a playlist")
-    p.add_argument("playlist", help="playlist ID, URI or URL")
-    p = sub.add_parser("search", parents=[lookup_opts],
+    sub.add_parser("liked", parents=[lookup_opts(0)], help="look up BPMs for your Liked Songs")
+    p = sub.add_parser("playlist", parents=[lookup_opts(0)], help="look up BPMs for a playlist")
+    p.add_argument("playlist", help="playlist ID, URI, URL or name")
+    p = sub.add_parser("search", parents=[lookup_opts(5)],
                        help="look up BPMs for tracks found by searching Spotify")
     p.add_argument("query", help='search terms, e.g. "daft punk one more time" or '
                                  '"track:one more time artist:daft punk"')
-    p.set_defaults(limit=5)
     sub.add_parser("playlists", help="list your playlists")
     p = sub.add_parser("show", help="print cached BPMs")
     p.add_argument("--csv", action="store_true")
@@ -160,7 +164,10 @@ def main():
     elif args.command == "liked":
         run_lookups(spotify_source.liked_tracks(sp), args)
     elif args.command == "playlist":
-        run_lookups(spotify_source.playlist_tracks(sp, args.playlist), args)
+        try:
+            run_lookups(spotify_source.playlist_tracks(sp, args.playlist), args)
+        except ValueError as e:
+            sys.exit(str(e))
     elif args.command == "search":
         run_lookups(spotify_source.search_tracks(sp, args.query), args)
 
