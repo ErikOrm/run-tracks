@@ -1,0 +1,22 @@
+[project]
+name = "spotify-bpm"
+version = "0.1.0"
+description = "Look up BPMs for your Spotify tracks via GetSongBPM and Deezer"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "python-dotenv>=1.2.3",
+    "requests>=2.34.2",
+    "spotipy>=2.26.0",
+]
+
+[project.scripts]
+run-tracks = "spotify_bpm.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
